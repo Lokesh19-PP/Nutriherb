@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}NutriHerb{% endblock %}</title>
+  <title>{% block title %}NutriHerb | Holistic Nutrition & Superfoods{% endblock %}</title>
   <link rel="icon" href="/static/img/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,36 +13,42 @@
 </head>
 <body>
   {% if messages %}
-    <div style="position: fixed; top: 100px; right: 20px; z-index: 1000; display: flex; flex-direction: column; gap: 10px;">
+    <div id="toast-container" style="position: fixed; top: 100px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 12px; pointer-events: none;">
       {% for message in messages %}
-        <div class="card animate" style="padding: 12px 24px; background: rgba(255,255,255,0.9); border-left: 4px solid var(--accent); white-space: nowrap;">
-          {{ message }}
+        <div class="card animate" style="padding: 16px 24px; min-width: 280px; background: rgba(255,255,255,0.95); border-left: 5px solid var(--accent); pointer-events: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+          <div style="font-weight: 700; color: #065f46; margin-bottom: 4px;">{{ message.tags|capfirst|default:"Message" }}</div>
+          <div style="font-size: 14px; color: var(--fg);">{{ message }}</div>
         </div>
       {% endfor %}
     </div>
     <script>
       setTimeout(() => {
-        document.querySelectorAll('.animate').forEach(el => {
-          if (el.parentElement.style.position === 'fixed') el.style.opacity = '0';
-        });
-      }, 3000);
+        const toasts = document.getElementById('toast-container');
+        if (toasts) {
+          toasts.style.transition = 'opacity 0.8s ease';
+          toasts.style.opacity = '0';
+          setTimeout(() => toasts.remove(), 800);
+        }
+      }, 4000);
     </script>
   {% endif %}
 
   <header>
-    <h1>NutriHerb</h1>
+    <a href="/" style="text-decoration: none; color: inherit;">
+      <h1>NutriHerb</h1>
+    </a>
     <nav>
       <a href="/">Home</a>
       <a href="/foods/">Foods</a>
       <a href="/recipes/">Recipes</a>
-      <a href="/health/">Health</a>
-      <div style="width: 1px; height: 20px; background: rgba(0,0,0,0.1); margin: 0 8px;"></div>
+      <a href="/health/">Health Hub</a>
+      <div style="width: 1px; height: 24px; background: rgba(0,0,0,0.1); margin: 0 8px;"></div>
       {% if user.is_authenticated %}
-        <a href="/profile/" style="background: rgba(16,185,129,0.1); color: var(--accent);">{{ user.username }}</a>
-        <a href="/logout/">Logout</a>
+        <a href="/profile/" style="background: rgba(16,185,129,0.12); color: var(--accent); white-space: nowrap;">👤 {{ user.username }}</a>
+        <a href="/logout/" style="font-weight: 500; font-size: 14px;">Logout</a>
       {% else %}
         <a href="/login/">Login</a>
-        <a href="/signup/" class="btn" style="padding: 8px 20px; font-size: 14px;">Join Free</a>
+        <a href="/signup/" class="btn" style="padding: 10px 24px; font-size: 14px; letter-spacing: 0.5px;">Join NutriHerb</a>
       {% endif %}
     </nav>
   </header>
@@ -52,8 +58,15 @@
   </main>
 
   <footer>
-    <div class="container">
-      <small>© 2026 NutriHerb • Nourishment for life.</small>
+    <div class="container" style="padding: 40px 24px;">
+      <div style="font-weight: 800; font-size: 20px; color: #065f46; margin-bottom: 24px;">🌿 NutriHerb</div>
+      <p class="muted" style="max-width: 400px; margin: 0 auto 24px auto;">Empowering your wellness journey through functional nutrition and nature's wisdom.</p>
+      <div style="display: flex; justify-content: center; gap: 24px; margin-bottom: 32px;">
+        <a href="/foods/" class="muted" style="text-decoration: none; font-size: 14px;">Browse Foods</a>
+        <a href="/recipes/" class="muted" style="text-decoration: none; font-size: 14px;">Explore Recipes</a>
+        <a href="/health/" class="muted" style="text-decoration: none; font-size: 14px;">Health Center</a>
+      </div>
+      <small class="muted" style="font-size: 12px; opacity: 0.7;">© 2026 NutriHerb Project • Handcrafted for Vibrant Health.</small>
     </div>
   </footer>
 </body>
