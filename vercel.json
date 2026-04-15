@@ -1,0 +1,20 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "nutriherb/nutriherb/wsgi.py",
+      "use": "@vercel/python",
+      "config": { "runtime": "python3.12" }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/static/(.*)",
+      "dest": "nutriherb/static/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "nutriherb/nutriherb/wsgi.py"
+    }
+  ]
+}
