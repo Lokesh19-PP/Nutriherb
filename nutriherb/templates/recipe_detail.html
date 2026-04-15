@@ -1,29 +1,35 @@
 {% extends 'base.html' %}
 {% block title %}{{ recipe.title }} - NutriHerb{% endblock %}
 {% block content %}
-  <a href="/recipes/" class="btn" style="margin-bottom:12px;">← Back to Recipes</a>
-  <article class="card">
-    <h1 style="margin-bottom:4px;">{{ recipe.title }}</h1>
-    <p class="muted">Recipe ID #{{ recipe.id }}</p>
-    <section style="margin-top:16px;">
-      <h3>Ingredients</h3>
-      <p>{{ recipe.ingredients }}</p>
+  <a href="/recipes/" class="btn" style="margin-bottom:24px; display:inline-flex; align-items:center; gap:8px;"><span>←</span> Back to Recipes</a>
+  
+  <div class="hero-banner animate" style="padding: 40px; text-align: left; grid-template-columns: 1fr;">
+    <p class="muted" style="margin-bottom:8px; font-weight:600; text-transform:uppercase; letter-spacing:1px;">Recipe ID #{{ recipe.id }}</p>
+    <h1 style="font-size: 48px; color:#064e3b; margin:0 0 16px 0; font-weight:800; line-height:1;">{{ recipe.title }}</h1>
+  </div>
+
+  <div class="grid" style="margin-top:24px;">
+    <section class="card animate" style="animation-delay: 0.1s;">
+      <h3 style="color:#059669; border-bottom:1px solid var(--card-border); padding-bottom:12px; margin-bottom:16px;">What You'll Need</h3>
+      <p style="font-size:18px; line-height:1.6; color:var(--fg);">{{ recipe.ingredients }}</p>
     </section>
-    <section style="margin-top:16px;">
-      <h3>Steps</h3>
-      <p style="white-space:pre-wrap;">{{ recipe.steps }}</p>
-    </section>
-    <section style="margin-top:16px;">
-      <h3>Related Foods & Herbs</h3>
-      <div class="chips">
+
+    <section class="card animate" style="animation-delay: 0.2s;">
+      <h3 style="color:#059669; border-bottom:1px solid var(--card-border); padding-bottom:12px; margin-bottom:16px;">Featured Superfoods</h3>
+      <div class="chips" style="margin-top:16px;">
         {% for food in related_foods %}
-          <span class="chip">{{ food.name }}</span>
+          <span class="chip active">{{ food.name }}</span>
         {% empty %}
-          <p class="muted">None listed.</p>
+          <p class="muted">No explicit superfoods listed.</p>
         {% endfor %}
       </div>
     </section>
-  </article>
+
+    <section class="card span-2 animate" style="animation-delay: 0.3s; grid-column: 1 / -1;">
+      <h3 style="color:#059669; border-bottom:1px solid var(--card-border); padding-bottom:12px; margin-bottom:16px;">Preparation Steps</h3>
+      <p style="white-space:pre-wrap; font-size:18px; line-height:1.8; color:var(--fg);">{{ recipe.steps }}</p>
+    </section>
+  </div>
 {% endblock %}
 
 

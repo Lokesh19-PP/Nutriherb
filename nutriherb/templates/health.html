@@ -3,23 +3,32 @@
 {% block content %}
   <h2>Common health issues and supportive foods</h2>
   <div class="search"><input id="issue-search" type="search" placeholder="Search health issues..."/></div>
-    <div class="card">
-      <label for="issue">Select a health issue:</label>
-      <select id="issue"><option value="">-- Choose --</option></select>
+    <div class="card animate" style="padding:40px; display:flex; flex-direction:column; gap:16px;">
+      <h3 style="margin:0; font-size:24px;">Select a Core Health Need</h3>
+      <p class="muted" style="margin:0;">Target specific aspects of your wellness profile.</p>
+      <div style="position:relative; width: 100%;">
+        <select id="issue" style="width: 100%; border: 2px solid transparent; background: rgba(255, 255, 255, 0.8); border-radius: 99px; padding: 18px 24px; outline: none; transition: all 0.3s ease; font-size: 18px; font-family: 'Outfit'; appearance:none; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); color: var(--fg); cursor:pointer;">
+          <option value="">-- Click to Choose --</option>
+        </select>
+        <span style="position:absolute; right:24px; top:50%; transform:translateY(-50%); pointer-events:none; font-size:12px;">▼</span>
+      </div>
     </div>
 
-    <section id="issue-details" style="display:none; margin-top:12px;">
-      <div class="card">
-        <h3 id="issue-name"></h3>
-        <p id="issue-desc"></p>
+    <section id="issue-details" style="display:none; margin-top:24px;">
+      <div class="hero-banner animate" style="text-align:left; padding:40px; grid-template-columns:1fr;">
+        <h3 id="issue-name" style="font-size:40px; color:#064e3b; margin:0 0 16px 0;"></h3>
+        <p id="issue-desc" style="font-size:20px; color:var(--fg); line-height:1.6;"></p>
       </div>
-      <div class="card">
-        <h3>Recommended Foods</h3>
-        <ul id="foods"></ul>
-      </div>
-      <div class="card">
-        <h3>Related Recipes</h3>
-        <ul id="recipes"></ul>
+      
+      <div class="grid" style="margin-top:24px;">
+        <div class="card animate">
+          <h3 style="color:#059669; border-bottom:1px solid var(--card-border); padding-bottom:12px; margin-bottom:16px;">Recommended Foods</h3>
+          <ul id="foods" style="list-style:none; padding:0; margin:0; line-height:1.8;"></ul>
+        </div>
+        <div class="card animate">
+          <h3 style="color:#059669; border-bottom:1px solid var(--card-border); padding-bottom:12px; margin-bottom:16px;">Targeted Recipes</h3>
+          <ul id="recipes" style="list-style:none; padding:0; margin:0; line-height:1.8;"></ul>
+        </div>
       </div>
     </section>
 
