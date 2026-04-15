@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}NutriHerb - Recipes{% endblock %}
+{% block content %}
+  <h2>Try these healthy recipes</h2>
+  <div class="search"><input id="recipe-search" type="search" placeholder="Search recipes, ingredients..."/></div>
+  <div id="recipes-list" class="grid"></div>
+  <script>
+    fetch('/api/recipes/')
+      .then(r => r.json())
+      .then(items => {
+        const root = document.getElementById('recipes-list');
+        const search = document.getElementById('recipe-search');
+
+        function render() {
+          const q = (search.value || '').toLowerCase();
+          const filtered = items.filter(i => !q || `${i.title} ${i.ingredients}`.toLowerCase().includes(q));
+          root.innerHTML = filtered.map(i => `
+            <div class=\"card\">
+              <h3>${i.title}</h3>
+              <a class=\"btn\" href=\"/recipes/${i.id}/\">Open Recipe</a>
+            </div>
+          `).join('') || '<p class="muted">No results.</p>';
+        }
+
+        search.addEventListener('input', render);
+        render();
+      });
+  </script>
+{% endblock %}
+
+

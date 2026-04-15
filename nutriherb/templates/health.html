@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block title %}NutriHerb - Health{% endblock %}
+{% block content %}
+  <h2>Common health issues and supportive foods</h2>
+  <div class="search"><input id="issue-search" type="search" placeholder="Search health issues..."/></div>
+    <div class="card">
+      <label for="issue">Select a health issue:</label>
+      <select id="issue"><option value="">-- Choose --</option></select>
+    </div>
+
+    <section id="issue-details" style="display:none; margin-top:12px;">
+      <div class="card">
+        <h3 id="issue-name"></h3>
+        <p id="issue-desc"></p>
+      </div>
+      <div class="card">
+        <h3>Recommended Foods</h3>
+        <ul id="foods"></ul>
+      </div>
+      <div class="card">
+        <h3>Related Recipes</h3>
+        <ul id="recipes"></ul>
+      </div>
+    </section>
+
+    <script>
+      const state = {
+        issues: [],
+        foods: [],
+        recipes: [],
+      };
+
+      Promise.all([
+        fetch('/api/healthissues/').then(r => r.json()),
+        fetch('/api/herbsfoods/').then(r => r.json()),
+        fetch('/api/recipes/').then(r => r.json()),
+      ]).then(([issues, foods, recipes]) => {
+        state.issues = issues;
+        state.foods = foods;
+        state.recipes = recipes;
+
+        const sel = document.getElementById('issue');
+        function refillOptions() {
+          const q = (document.getElementById('issue-search').value || '').toLowerCase();
+          const filtered = state.issues.filter(i => !q || `${i.name} ${i.description}`.toLowerCase().includes(q));
+          sel.innerHTML = '<option value="">-- Choose --</option>' + filtered.map(i => `<option value="${i.id}">${i.name}</option>`).join('');
+        }
+        refillOptions();
+        document.getElementById('issue-search').addEventListener('input', refillOptions);
+        sel.addEventListener('change', () => {
+          const id = sel.value ? parseInt(sel.value, 10) : null;
+          const issue = state.issues.find(x => x.id === id);
+          const details = document.getElementById('issue-details');
+          if (!issue) { details.style.display = 'none'; return; }
+          details.style.display = 'block';
+          document.getElementById('issue-name').textContent = issue.name;
+          document.getElementById('issue-desc').textContent = issue.description || '';
+
+          const foodsForIssue = state.foods.filter(f => (issue.herbs_or_foods || []).includes(f.id));
+          document.getElementById('foods').innerHTML = foodsForIssue.map(f => `<li><strong>${f.name}</strong> — ${f.benefits || ''}</li>`).join('') || '<li>No recommendations.</li>';
+
+          const foodIds = new Set(foodsForIssue.map(f => f.id));
+          const recipesForIssue = state.recipes.filter(r => (r.herbs_or_foods || []).some(fid => foodIds.has(fid)));
+          document.getElementById('recipes').innerHTML = recipesForIssue.map(r => `<li>${r.title}</li>`).join('') || '<li>No related recipes.</li>';
+        });
+      });
+    </script>
+{% endblock %}
+
+

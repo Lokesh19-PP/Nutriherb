@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block title %}NutriHerb - Foods{% endblock %}
+{% block content %}
+  <h2>Explore foods and herbs</h2>
+  <div class="search"><input id="food-search" type="search" placeholder="Search foods, herbs, nutrients..."/></div>
+  <div class="chips" id="food-chips">
+    <span class="chip active" data-cat="all">All</span>
+    <span class="chip" data-cat="food">Food</span>
+    <span class="chip" data-cat="herb">Herb</span>
+  </div>
+  <div id="foods-list" class="grid"></div>
+  <script>
+    fetch('/api/herbsfoods/')
+      .then(r => r.json())
+      .then(items => {
+        const root = document.getElementById('foods-list');
+        const search = document.getElementById('food-search');
+        const chips = document.getElementById('food-chips');
+
+        function render() {
+          const q = (search.value || '').toLowerCase();
+          const activeChip = chips.querySelector('.chip.active');
+          const cat = activeChip ? activeChip.getAttribute('data-cat') : 'all';
+          const filtered = items.filter(i => {
+            const matchQ = !q || [i.name, i.nutrients, i.benefits, i.category].join(' ').toLowerCase().includes(q);
+            const matchCat = cat === 'all' || (i.category || '').toLowerCase() === cat;
+            return matchQ && matchCat;
+          });
+          root.innerHTML = filtered.map(i => `<div class=\"card\"><h3>${i.name}</h3><p class=\"muted\">${i.category}</p><p>${i.benefits || ''}</p></div>`).join('') || '<p class="muted">No results.</p>';
+        }
+
+        search.addEventListener('input', render);
+        chips.addEventListener('click', (e) => {
+          if (!e.target.classList.contains('chip')) return;
+          chips.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+          e.target.classList.add('active');
+          render();
+        });
+
+        render();
+      });
+  </script>
+{% endblock %}
+
+

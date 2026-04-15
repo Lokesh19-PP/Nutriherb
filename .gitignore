@@ -1,0 +1,43 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Django
+*.log
+local_settings.py
+
+# Optional: Ignore DB since it's a template, but often kept in portfolios if demo data is needed.
+# We will keep db.sqlite3 tracked so the user can showcase it immediately to recruiters, 
+# but ignore other sqlite temp files.
+*.sqlite3-journal
+*.sqlite3-wal
+*.sqlite3-shm
+
+# IDEs
+.idea/
+.vscode/
+*.swp
