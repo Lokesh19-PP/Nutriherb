@@ -5,11 +5,26 @@
     <h2 class="hero-title">Welcome Back</h2>
     <p class="hero-sub" style="margin-top:16px;">Log in to access your favorited superfoods and recipes.</p>
     
-    <form method="post" style="margin-top: 32px; display: flex; flex-direction: column; gap: 16px;">
+    <form method="post" style="margin-top: 32px;">
         {% csrf_token %}
-        <input type="text" name="username" placeholder="Username" required style="padding: 16px 24px;">
-        <input type="password" name="password" placeholder="Password" required style="padding: 16px 24px;">
-        <button type="submit" class="btn" style="width: 100%;">Login</button>
+        {% if form.non_field_errors %}
+          <div class="error-text" style="margin-bottom: 16px;">{{ form.non_field_errors }}</div>
+        {% endif %}
+        
+        {% for field in form %}
+          <div class="form-group">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% if field.help_text %}
+              <small class="help-text">{{ field.help_text }}</small>
+            {% endif %}
+            {% for error in field.errors %}
+              <small class="error-text">{{ error }}</small>
+            {% endfor %}
+          </div>
+        {% endfor %}
+        
+        <button type="submit" class="btn" style="width: 100%; margin-top: 16px;">Login</button>
     </form>
     <p class="muted" style="margin-top: 24px;">Don't have an account? <a href="/signup/" style="color: var(--accent); text-decoration: none; font-weight: 600;">Sign up here</a></p>
 </div>
