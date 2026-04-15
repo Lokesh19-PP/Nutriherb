@@ -5,7 +5,48 @@
   
   <div class="hero-banner animate" style="padding: 40px; text-align: left; grid-template-columns: 1fr;">
     <p class="muted" style="margin-bottom:8px; font-weight:600; text-transform:uppercase; letter-spacing:1px;">Recipe ID #{{ recipe.id }}</p>
-    <h1 style="font-size: 48px; color:#064e3b; margin:0 0 16px 0; font-weight:800; line-height:1;">{{ recipe.title }}</h1>
+    <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+      <div>
+        <h1 style="font-size: 48px; color:#064e3b; margin:0 0 16px 0; font-weight:800; line-height:1;">{{ recipe.title }}</h1>
+        <p class="muted" style="margin-bottom:0; font-weight:600; text-transform:uppercase; letter-spacing:1px;">Recipe ID #{{ recipe.id }}</p>
+      </div>
+      {% if user.is_authenticated %}
+        <button id="fav-btn" data-id="{{ recipe.id }}" class="btn {% if is_favorited %}active{% endif %}" style="border-radius:50%; width:64px; height:64px; display:flex; align-items:center; justify-content:center; padding:0; font-size:24px; background: {% if is_favorited %}var(--accent){% else %}white{% endif %}; color: {% if is_favorited %}white{% else %}var(--accent){% endif %}; border: 2px solid var(--accent);">
+          {% if is_favorited %}❤️{% else %}🤍{% endif %}
+        </button>
+      {% endif %}
+    </div>
+
+    <script>
+      const favBtn = document.getElementById('fav-btn');
+      if (favBtn) {
+        favBtn.addEventListener('click', () => {
+          const recipeId = favBtn.getAttribute('data-id');
+          fetch('/api/favorites/toggle/', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({ recipe_id: recipeId })
+          })
+          .then(r => r.json())
+          .then(data => {
+            if (data.status === 'added') {
+              favBtn.innerHTML = '❤️';
+              favBtn.classList.add('active');
+              favBtn.style.background = 'var(--accent)';
+              favBtn.style.color = 'white';
+            } else {
+              favBtn.innerHTML = '🤍';
+              favBtn.classList.remove('active');
+              favBtn.style.background = 'white';
+              favBtn.style.color = 'var(--accent)';
+            }
+          });
+        });
+      }
+    </script>
   </div>
 
   <div class="grid" style="margin-top:24px;">

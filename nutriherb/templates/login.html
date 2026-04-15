@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}Login - NutriHerb{% endblock %}
+{% block content %}
+<div class="hero-banner animate" style="padding: 64px 40px; text-align: center; grid-template-columns: 1fr; max-width: 500px; margin: 0 auto;">
+    <h2 class="hero-title">Welcome Back</h2>
+    <p class="hero-sub" style="margin-top:16px;">Log in to access your favorited superfoods and recipes.</p>
+    
+    <form method="post" style="margin-top: 32px; display: flex; flex-direction: column; gap: 16px;">
+        {% csrf_token %}
+        <input type="text" name="username" placeholder="Username" required style="padding: 16px 24px;">
+        <input type="password" name="password" placeholder="Password" required style="padding: 16px 24px;">
+        <button type="submit" class="btn" style="width: 100%;">Login</button>
+    </form>
+    <p class="muted" style="margin-top: 24px;">Don't have an account? <a href="/signup/" style="color: var(--accent); text-decoration: none; font-weight: 600;">Sign up here</a></p>
+</div>
+{% endblock %}

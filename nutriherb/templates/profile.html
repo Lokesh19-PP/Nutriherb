@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}My Profile - NutriHerb{% endblock %}
+{% block content %}
+<div class="hero-banner animate" style="padding: 64px 40px; text-align: left; grid-template-columns: 1fr;">
+    <h2 class="hero-title">Hello, {{ user.username }}!</h2>
+    <p class="hero-sub" style="margin-top:16px;">This is your personal dashboard for curated wellness.</p>
+</div>
+
+<div class="section animate" style="margin-top: 40px;">
+    <h2>Your Saved Recipes</h2>
+    <div class="bento-grid" id="favorites-list">
+        {% for fav in favorites %}
+        <div class="card" style="display:flex; flex-direction:column; justify-content:space-between;">
+            <div>
+                <h3 style="margin:0 0 16px 0; font-size:24px; color:#064e3b;">{{ fav.recipe.title }}</h3>
+                <p class="muted" style="font-size:14px;">Added on {{ fav.created_at|date:"M d, Y" }}</p>
+            </div>
+            <a class="btn" href="/recipes/{{ fav.recipe.id }}/" style="text-align: center; width: 100%; margin-top: 16px;">View Recipe</a>
+        </div>
+        {% empty %}
+        <div class="card span-3" style="text-align:center; padding: 64px;">
+            <p class="muted">You haven't saved any recipes yet.</p>
+            <a href="/recipes/" class="btn" style="margin-top: 16px;">Browse Recipes</a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

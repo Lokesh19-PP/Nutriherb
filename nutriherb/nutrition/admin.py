@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import HerbOrFood, HealthIssue, Recipe
+from .models import HerbOrFood, HealthIssue, Recipe, Favorite
 
 @admin.register(HerbOrFood)
 class HerbOrFoodAdmin(admin.ModelAdmin):
@@ -18,3 +18,8 @@ class RecipeAdmin(admin.ModelAdmin):
     list_display = ('title',)
     search_fields = ('title', 'ingredients')
     filter_horizontal = ('herbs_or_foods',)
+
+@admin.register(Favorite)
+class FavoriteAdmin(admin.ModelAdmin):
+    list_display = ('user', 'recipe', 'created_at')
+    search_fields = ('user__username', 'recipe__title')

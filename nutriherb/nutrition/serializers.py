@@ -1,5 +1,12 @@
 from rest_framework import serializers
-from .models import HerbOrFood, HealthIssue, Recipe
+from .models import HerbOrFood, HealthIssue, Recipe, Favorite
+
+
+class FavoriteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Favorite
+        fields = ['id', 'user', 'recipe', 'created_at']
+        read_only_fields = ['user']
 
 
 class HerbOrFoodSerializer(serializers.ModelSerializer):
