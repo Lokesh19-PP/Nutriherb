@@ -1,14 +1,22 @@
 {% extends 'base.html' %}
 {% block title %}NutriHerb - Foods{% endblock %}
 {% block content %}
-  <h2>Explore foods and herbs</h2>
-  <div class="search"><input id="food-search" type="search" placeholder="Search foods, herbs, nutrients..."/></div>
-  <div class="chips" id="food-chips">
-    <span class="chip active" data-cat="all">All</span>
-    <span class="chip" data-cat="food">Food</span>
-    <span class="chip" data-cat="herb">Herb</span>
+  <div class="hero-banner animate" style="padding: 64px 40px; text-align: center; grid-template-columns: 1fr;">
+    <h2 class="hero-title">Explore Superfoods & Herbs</h2>
+    <p class="hero-sub" style="margin-top:16px;">Dive into our database of nutrient-rich ingredients.</p>
+    
+    <div style="max-width: 600px; margin: 32px auto 0 auto;">
+      <input id="food-search" type="search" placeholder="Search foods, herbs, or specific nutrients (e.g., Vitamin C)..." style="padding: 20px 32px; font-size: 18px;"/>
+      <div class="chips" id="food-chips" style="justify-content: center; margin-top:24px;">
+        <span class="chip active" data-cat="all">Everything</span>
+        <span class="chip" data-cat="food">🌿 Foods</span>
+        <span class="chip" data-cat="herb">🍃 Herbs</span>
+      </div>
+    </div>
   </div>
-  <div id="foods-list" class="grid"></div>
+
+  <div id="foods-list" class="bento-grid" style="margin-top:40px;"></div>
+
   <script>
     fetch('/api/herbsfoods/')
       .then(r => r.json())
@@ -26,7 +34,21 @@
             const matchCat = cat === 'all' || (i.category || '').toLowerCase() === cat;
             return matchQ && matchCat;
           });
-          root.innerHTML = filtered.map(i => `<div class=\"card\"><h3>${i.name}</h3><p class=\"muted\">${i.category}</p><p>${i.benefits || ''}</p></div>`).join('') || '<p class="muted">No results.</p>';
+          
+          root.innerHTML = filtered.map((i, index) => `
+            <div class=\"card animate\" style=\"animation-delay: ${index * 0.1}s; display:flex; flex-direction:column; justify-content:space-between;\">
+              <div>
+                <div style=\"display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px;\">
+                  <h3 style=\"margin:0; font-size:24px; color:#064e3b;\">${i.name}</h3>
+                  <span class=\"chip\" style=\"font-size:12px; padding:4px 12px; background:rgba(16,185,129,0.1); border:none; color:#059669;\">${i.category.toUpperCase()}</span>
+                </div>
+                <p style=\"color:var(--fg); line-height:1.6;\"><strong>Benefits:</strong><br>${i.benefits || 'No specific benefits listed.'}</p>
+              </div>
+              <div style=\"margin-top:16px; padding-top:16px; border-top:1px solid rgba(0,0,0,0.05);\">
+                <p style=\"font-size:14px; margin:0;\" class=\"muted\"><strong>Key Nutrients:</strong> ${i.nutrients || 'N/A'}</p>
+              </div>
+            </div>
+          `).join('') || '<div class="card" style="grid-column: 1/-1; text-align:center;"><p class="muted">No superfoods match your search.</p></div>';
         }
 
         search.addEventListener('input', render);

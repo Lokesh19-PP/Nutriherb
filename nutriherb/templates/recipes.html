@@ -1,9 +1,17 @@
 {% extends 'base.html' %}
 {% block title %}NutriHerb - Recipes{% endblock %}
 {% block content %}
-  <h2>Try these healthy recipes</h2>
-  <div class="search"><input id="recipe-search" type="search" placeholder="Search recipes, ingredients..."/></div>
-  <div id="recipes-list" class="grid"></div>
+  <div class="hero-banner animate" style="padding: 64px 40px; text-align: center; grid-template-columns: 1fr;">
+    <h2 class="hero-title">Nourishing Recipes</h2>
+    <p class="hero-sub" style="margin-top:16px;">Quick, balanced, and wholesome ways to integrate superfoods into your life.</p>
+    
+    <div style="max-width: 600px; margin: 32px auto 0 auto;">
+      <input id="recipe-search" type="search" placeholder="Search for turmeric lattes, salads, smoothies..." style="padding: 20px 32px; font-size: 18px;"/>
+    </div>
+  </div>
+
+  <div id="recipes-list" class="bento-grid" style="margin-top:40px;"></div>
+
   <script>
     fetch('/api/recipes/')
       .then(r => r.json())
@@ -14,12 +22,16 @@
         function render() {
           const q = (search.value || '').toLowerCase();
           const filtered = items.filter(i => !q || `${i.title} ${i.ingredients}`.toLowerCase().includes(q));
-          root.innerHTML = filtered.map(i => `
-            <div class=\"card\">
-              <h3>${i.title}</h3>
-              <a class=\"btn\" href=\"/recipes/${i.id}/\">Open Recipe</a>
+          
+          root.innerHTML = filtered.map((i, index) => `
+            <div class=\"card animate\" style=\"animation-delay: ${index * 0.1}s; display:flex; flex-direction:column; justify-content:space-between;\">
+              <div>
+                <h3 style=\"margin:0 0 16px 0; font-size:24px; color:#064e3b;\">${i.title}</h3>
+                <p style=\"color:var(--muted); line-height:1.6; margin-bottom: 24px;\"><strong>Ingredients:</strong><br>${i.ingredients}</p>
+              </div>
+              <a class=\"btn\" href=\"/recipes/${i.id}/\" style=\"text-align: center; width: 100%;\">View Recipe & Steps</a>
             </div>
-          `).join('') || '<p class="muted">No results.</p>';
+          `).join('') || '<div class="card" style="grid-column: 1/-1; text-align:center;"><p class="muted">No recipes match your search.</p></div>';
         }
 
         search.addEventListener('input', render);
