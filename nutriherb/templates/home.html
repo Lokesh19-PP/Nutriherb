@@ -1,142 +1,147 @@
 {% extends 'base.html' %}
-{% block title %}NutriHerb - Home{% endblock %}
+{% block title %}Nature's Wisdom | NutriHerb{% endblock %}
 {% block content %}
-  <section class="hero-banner animate">
-    <div class="hero-content">
-      <h2 class="hero-title">Nature's nutrition for your everyday wellness</h2>
-      <p class="hero-sub" style="margin-top:16px;">NutriHerb helps you explore nutrient-dense foods, herbal wisdom, and functional recipes tailored perfectly to match your dynamic health needs.</p>
-      
-      <div class="hero-search">
-        <input id="home-search" type="search" placeholder="Search for spinach, immunity, salads..."/>
-        <div class="tabs" id="home-tabs">
-          <span class="tab active" data-type="foods">Foods</span>
-          <span class="tab" data-type="recipes">Recipes</span>
-          <span class="tab" data-type="health">Health</span>
-        </div>
+  <!-- Hero Section -->
+  <section class="hero-banner reveal" style="padding-top: 6rem; padding-bottom: 8rem;">
+    <div style="max-width: 650px;">
+      <div class="badge" style="display:inline-block; padding: 0.5rem 1.2rem; background: var(--primary-glow); color: var(--primary-dark); border-radius: 99px; font-weight: 800; font-size: 0.8rem; margin-bottom: 2rem; text-transform: uppercase; letter-spacing: 0.1em;">
+        Pure & Potent
       </div>
-      <div class="results">
-        <div id="home-results" class="result-list"></div>
+      <h1 style="font-size: 5rem; margin-bottom: 2rem;">Heal through the wisdom of nature.</h1>
+      <p style="font-size: 1.25rem; margin-bottom: 3.5rem; line-height: 1.8; color: var(--fg-muted);">Explore a curated library of functional foods and medicinal herbs designed to revitalize your body and mind.</p>
+      
+      <div class="hero-search-wrapper" style="max-width: 600px; display: flex; gap: 0.5rem; background: white; padding: 0.5rem; border-radius: var(--radius-full); box-shadow: 0 20px 50px rgba(0,0,0,0.06);">
+        <input id="main-search" type="search" placeholder="Search for Turmeric, Ashwagandha, Elderberry..." style="flex: 1; border: none; padding: 1rem 1.5rem; font-size: 1.1rem; background: transparent; box-shadow: none;"/>
+        <button id="search-btn" class="btn" style="padding: 1rem 2rem; white-space: nowrap;">Search Library</button>
       </div>
     </div>
     
-    <div class="hero-image">
+    <div class="hero-image-container">
       <img src="/static/img/hero_veggies.png" alt="Fresh beautiful vegetables" />
     </div>
-
-    <script>
-      (function(){
-        const search = document.getElementById('home-search');
-        const tabs = document.getElementById('home-tabs');
-        const results = document.getElementById('home-results');
-        let active = 'foods';
-        let cache = { foods: null, recipes: null, health: null };
-
-        function setActive(type){
-          active = type;
-          Array.from(tabs.children).forEach(t => t.classList.toggle('active', t.getAttribute('data-type')===type));
-          render();
-        }
-
-        function fetchData(type){
-          if (cache[type]) return Promise.resolve(cache[type]);
-          const endpoints = { foods: '/api/herbsfoods/', recipes: '/api/recipes/', health: '/api/healthissues/' };
-          return fetch(endpoints[type]).then(r=>r.json()).then(data=>{ cache[type]=data; return data; });
-        }
-
-        function tmpl(item){
-          if (active==='foods') return `<div class=\"result-item\"><h4>${item.name}</h4><p class=\"muted\" style=\"font-size:14px; margin:0;\">${item.benefits||''}</p></div>`;
-          if (active==='recipes') return `<div class=\"result-item\" style=\"display:flex; justify-content:space-between; align-items:center;\"><div><h4 style=\"margin:0;\">${item.title}</h4></div><a class=\"btn\" href=\"/recipes/${item.id}/\">Cook</a></div>`;
-          return `<div class=\"result-item\"><h4>${item.name}</h4><p class=\"muted\" style=\"font-size:14px; margin:0;\">${item.description||''}</p></div>`;
-        }
-
-        function render(){
-          const q = (search.value||'').toLowerCase();
-          if(!q) { results.innerHTML = ''; return; }
-          fetchData(active).then(items=>{
-            const filtered = items.filter(i=>{
-              const text = active==='foods' ? `${i.name} ${i.nutrients} ${i.benefits}`
-                         : active==='recipes' ? `${i.title} ${i.ingredients}`
-                         : `${i.name} ${i.description}`;
-              return text.toLowerCase().includes(q);
-            }).slice(0, 3);
-            results.innerHTML = filtered.length ? filtered.map(tmpl).join('') : '<p class="muted">No results found.</p>';
-          });
-        }
-
-        tabs.addEventListener('click', (e)=>{
-          const t = e.target.closest('.tab');
-          if (!t) return;
-          setActive(t.getAttribute('data-type'));
-        });
-        search.addEventListener('input', render);
-      })();
-    </script>
   </section>
 
-  <section class="section animate">
-    <h2>Start Your Journey</h2>
-    <div class="bento-grid">
-      <div class="card span-2" style="display:flex; flex-direction:column; justify-content:space-between; position:relative; overflow:hidden;">
-        <img src="/static/img/section_foods.png" alt="Foods" style="height: 160px; position:absolute; top:0; left:0; width:100%; border-radius:0; z-index:0; object-fit:cover; opacity: 0.85;"/>
-        <div style="position:relative; z-index:1; padding-top: 130px;">
-          <h3 style="margin-top:0;">Explore Superfoods</h3>
-          <p>Find nutrient-rich options like spinach, tulsi, and quinoa. Build your grocery list around powerful, natural ingredients.</p>
-          <a class="btn" href="/foods/" style="margin-top:12px;">Browse Database</a>
-        </div>
+  <!-- Mastery Section -->
+  <section class="section reveal" style="padding-top: 0;">
+    <div style="text-align: center; margin-bottom: 6rem;">
+      <h2 style="font-size: 3.5rem; margin-bottom: 1.5rem;">Master the Art of Herbalism</h2>
+      <p style="max-width: 600px; margin: 0 auto; color: var(--fg-muted);">Our specialized tools help you integrate ancient wisdom into your modern lifestyle.</p>
+    </div>
+
+    <div class="bento">
+      <div class="card reveal bento-item">
+        <div style="font-size: 3rem; margin-bottom: 1.5rem;">🧬</div>
+        <h3 style="margin-bottom: 1rem;">Nutrient Profiling</h3>
+        <p>Deep dive into the biochemical makeup of every superfood in our database.</p>
+        <a href="/foods/" style="display:inline-block; margin-top: 2rem; font-weight: 800; color: var(--primary); text-decoration: none;">Explore Database →</a>
       </div>
       
-      <div class="card">
-        <h3>Health Goals</h3>
-        <p>Seeking immunity or digestion support? Learn what foods help you most.</p>
-        <img src="/static/img/section_health.png" alt="Health" />
-        <a class="btn" href="/health/" style="width:100%; text-align:center;">Discover</a>
+      <div class="card reveal bento-item">
+        <div style="font-size: 3rem; margin-bottom: 1.5rem;">🫖</div>
+        <h3 style="margin-bottom: 1rem;">Synergistic Recipes</h3>
+        <p>Recipes crafted to maximize the bioavailability of nature's potent compounds.</p>
+        <a href="/recipes/" style="display:inline-block; margin-top: 2rem; font-weight: 800; color: var(--primary); text-decoration: none;">Browse Kitchen →</a>
       </div>
 
-      <div class="card span-3">
-        <div style="flex:1;">
-          <h3 style="font-size: 32px; color: #059669;">Nourishing Recipes</h3>
-          <p style="font-size: 18px;">From Turmeric Lattes to Power Spinach Salads. Turn raw superfoods into incredible, life-affirming meals.</p>
-          <a class="btn" href="/recipes/" style="margin-top: 16px;">Step into the Kitchen</a>
-        </div>
-        <img src="/static/img/section_recipes.png" alt="Recipes" style="border-radius:24px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);"/>
+      <div class="card reveal bento-item">
+        <div style="font-size: 3rem; margin-bottom: 1.5rem;">🎯</div>
+        <h3 style="margin-bottom: 1rem;">Targeted Support</h3>
+        <p>Find nature's solutions for specific wellness goals and physiological needs.</p>
+        <a href="/health/" style="display:inline-block; margin-top: 2rem; font-weight: 800; color: var(--primary); text-decoration: none;">View Health Hub →</a>
       </div>
     </div>
   </section>
 
-  <section class="section animate">
-    <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-end;">
+  <!-- Wellness Pulse Section -->
+  <section id="wellness-pulse" class="section reveal" style="background: white; border-radius: 40px; margin-bottom: 6rem; padding: 6rem 4rem; box-shadow: 0 40px 100px rgba(6, 78, 59, 0.03);">
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 4rem; flex-wrap: wrap; gap: 2rem;">
       <div>
-        <h2>Why NutriHerb?</h2>
-        <p class="muted" style="max-width:500px;">Built specifically to bring evidence-informed ancestral dietary practices back to the modern table.</p>
+        <h2 id="pulse-title" style="font-size: 3.5rem;">Your Morning Pulse</h2>
+        <p style="font-size: 1.1rem; color: var(--fg-muted);">Real-time recommendations from our database.</p>
       </div>
+      <div id="pulse-time" style="font-weight: 800; color: var(--primary); font-size: 1.1rem; padding: 1rem 2rem; background: var(--bg-main); border-radius: 99px;">08:30 AM</div>
     </div>
-    <div class="grid" style="margin-top:32px;">
-      <div class="card" style="background: rgba(255,255,255,0.4); text-align:center;">
-        <div style="font-size: 40px; margin-bottom:12px;">🌍</div>
-        <h3>Accessible</h3>
-        <p>Local ingredients tailored to common kitchens.</p>
-      </div>
-      <div class="card" style="background: rgba(255,255,255,0.4); text-align:center;">
-        <div style="font-size: 40px; margin-bottom:12px;">🔬</div>
-        <h3>Evidence-based</h3>
-        <p>Simple guidance mapped securely to health needs.</p>
-      </div>
-      <div class="card" style="background: rgba(255,255,255,0.4); text-align:center;">
-        <div style="font-size: 40px; margin-bottom:12px;">🥗</div>
-        <h3>Practical recipes</h3>
-        <p>Minimal ingredients, deeply satisfying output.</p>
+    
+    <div id="pulse-recommendations" class="grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+      <!-- Real data will be injected here -->
+    </div>
+  </section>
+
+  <!-- Newsletter -->
+  <section class="reveal" style="margin-bottom: 8rem; padding: 0 2rem;">
+    <div class="card newsletter-card" style="padding: 6rem 4rem;">
+      <h2 style="color: white; margin-bottom: 1.5rem; font-size: 4rem;">Nature's wisdom, <br>direct to you.</h2>
+      <p style="color: rgba(255,255,255,0.9); max-width: 500px; margin: 0 auto 4rem; font-size: 1.25rem;">Join 25,000+ subscribers for weekly insights and recipes.</p>
+      
+      <div style="display: flex; gap: 1rem; max-width: 550px; margin: 0 auto; flex-wrap: wrap; justify-content: center;">
+        <input type="email" placeholder="Your best email address..." style="flex: 1; min-width: 300px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 1.5rem 2rem; border-radius: 99px;"/>
+        <button class="btn btn-secondary" style="min-width: 200px; padding: 1.5rem 2rem; border-radius: 99px; font-weight: 900; letter-spacing: 0.05em; text-transform: uppercase;">Subscribe</button>
       </div>
     </div>
   </section>
 
-  <section class="section animate">
-    <div class="card" style="background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,255,255,0.5)); border-radius:32px; padding:48px; text-align:center;">
-      <h2 style="margin-bottom:12px;">Stay in the loop</h2>
-      <p class="muted" style="max-width:400px; margin: 0 auto 32px auto;">Join our list for weekly superfood updates and exclusive vibrant recipes.</p>
-      <div style="display:flex; gap:12px; max-width:500px; margin:0 auto; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border-radius:99px; padding:8px; background:#fff;">
-        <input type="email" placeholder="Enter your email address" style="border:none; box-shadow:none; flex:1; background:transparent;"/>
-        <button class="btn" type="button" onclick="alert('Thanks! You are on the list.')">Subscribe</button>
-      </div>
-    </div>
-  </section>
+  <script>
+    let foodsCache = [];
+
+    async function initPulse() {
+      const r = await fetch('/api/herbsfoods/');
+      foodsCache = await r.json();
+      updatePulse();
+    }
+
+    function updatePulse() {
+      if (!foodsCache.length) return;
+
+      const hour = new Date().getHours();
+      const title = document.getElementById('pulse-title');
+      const timeDisplay = document.getElementById('pulse-time');
+      const container = document.getElementById('pulse-recommendations');
+      const now = new Date();
+      timeDisplay.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+      let pulseItems = [];
+      if (hour < 12) {
+        title.textContent = "Your Morning Pulse";
+        // Filter for energy/metabolism benefits
+        pulseItems = foodsCache.filter(f => f.benefits.toLowerCase().includes('energy') || f.benefits.toLowerCase().includes('metabolism')).slice(0, 3);
+      } else if (hour < 17) {
+        title.textContent = "Your Afternoon Focus";
+        // Filter for focus/cognition
+        pulseItems = foodsCache.filter(f => f.benefits.toLowerCase().includes('digestion') || f.benefits.toLowerCase().includes('focus') || f.name.includes('Ginger')).slice(0, 3);
+      } else {
+        title.textContent = "Your Evening Restoration";
+        // Filter for sleep/stress
+        pulseItems = foodsCache.filter(f => f.benefits.toLowerCase().includes('stress') || f.benefits.toLowerCase().includes('sleep') || f.benefits.toLowerCase().includes('anti-inflammatory')).slice(0, 3);
+      }
+
+      // If filters return empty, just show top 3
+      if (pulseItems.length === 0) pulseItems = foodsCache.slice(0, 3);
+
+      container.innerHTML = pulseItems.map(i => `
+        <div class="card reveal" style="background: var(--bg-main); border: none; padding: 2.5rem; display: flex; flex-direction: column;">
+          <div style="font-size: 3.5rem; margin-bottom: 1.5rem;">${i.category === 'herb' ? '🌿' : i.category === 'spice' ? '🌶️' : '🍎'}</div>
+          <h3 style="margin-bottom: 1rem;">${i.name}</h3>
+          <p style="font-size: 0.95rem; color: var(--fg-muted); flex: 1;">${i.benefits.substring(0, 120)}...</p>
+          <a href="/foods/" style="margin-top: 1.5rem; font-weight: 800; font-size: 0.8rem; color: var(--primary); text-decoration: none; text-transform: uppercase;">Learn More →</a>
+        </div>
+      `).join('');
+    }
+
+    initPulse();
+    setInterval(updatePulse, 60000);
+
+    // Global Search Logic
+    const searchInput = document.getElementById('main-search');
+    const searchBtn = document.getElementById('search-btn');
+    
+    function performSearch() {
+      const q = searchInput.value;
+      if (q.trim()) window.location.href = `/foods/?q=${encodeURIComponent(q)}`;
+    }
+
+    searchBtn.addEventListener('click', performSearch);
+    searchInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') performSearch();
+    });
+  </script>
 {% endblock %}
