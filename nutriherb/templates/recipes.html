@@ -1,16 +1,22 @@
 {% extends 'base.html' %}
-{% block title %}NutriHerb - Recipes{% endblock %}
+{% block title %}Functional Recipes | NutriHerb{% endblock %}
 {% block content %}
-  <div class="hero-banner animate" style="padding: 64px 40px; text-align: center; grid-template-columns: 1fr;">
-    <h2 class="hero-title">Nourishing Recipes</h2>
-    <p class="hero-sub" style="margin-top:16px;">Quick, balanced, and wholesome ways to integrate superfoods into your life.</p>
-    
-    <div style="max-width: 600px; margin: 32px auto 0 auto;">
-      <input id="recipe-search" type="search" placeholder="Search for turmeric lattes, salads, smoothies..." style="padding: 20px 32px; font-size: 18px;"/>
+  <section class="reveal" style="text-align: center; margin-bottom: 4rem;">
+    <div class="badge" style="display:inline-block; padding: 0.5rem 1rem; background: var(--primary-glow); color: var(--primary-dark); border-radius: 99px; font-weight: 700; font-size: 0.8rem; margin-bottom: 1.5rem;">
+      THE KITCHEN
     </div>
-  </div>
+    <h1 style="margin-bottom: 1rem;">Nourishing Recipes</h1>
+    <p style="max-width: 600px; margin: 0 auto 3rem;">Quick, balanced, and wholesome ways to integrate superfoods into your daily life.</p>
+    
+    <div style="max-width: 600px; margin: 0 auto; position: relative;">
+      <span style="position: absolute; left: 1.5rem; top: 1.2rem; font-size: 1.2rem;">🍳</span>
+      <input id="recipe-search" type="search" placeholder="Search for turmeric lattes, salads, smoothies..." style="padding-left: 3.5rem;"/>
+    </div>
+  </section>
 
-  <div id="recipes-list" class="bento-grid" style="margin-top:40px;"></div>
+  <div id="recipes-list" class="bento" style="grid-template-rows: auto;">
+    <!-- Recipes will be injected here -->
+  </div>
 
   <script>
     fetch('/api/recipes/')
@@ -24,14 +30,32 @@
           const filtered = items.filter(i => !q || `${i.title} ${i.ingredients}`.toLowerCase().includes(q));
           
           root.innerHTML = filtered.map((i, index) => `
-            <div class=\"card animate\" style=\"animation-delay: ${index * 0.1}s; display:flex; flex-direction:column; justify-content:space-between;\">
-              <div>
-                <h3 style=\"margin:0 0 16px 0; font-size:24px; color:#064e3b;\">${i.title}</h3>
-                <p style=\"color:var(--muted); line-height:1.6; margin-bottom: 24px;\"><strong>Ingredients:</strong><br>${i.ingredients}</p>
+            <div class="card reveal" style="animation-delay: ${index * 0.05}s; display:flex; flex-direction:column; padding: 0; overflow: hidden; height: 100%;">
+              <div style="height: 200px; background: linear-gradient(45deg, var(--primary), var(--bg-1)); position: relative; display: flex; align-items: center; justify-content: center; font-size: 4rem;">
+                🍲
+                <div style="position: absolute; top: 1rem; right: 1rem; background: white; padding: 0.25rem 0.75rem; border-radius: 99px; font-size: 0.7rem; font-weight: 800; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+                  15 MIN
+                </div>
               </div>
-              <a class=\"btn\" href=\"/recipes/${i.id}/\" style=\"text-align: center; width: 100%;\">View Recipe & Steps</a>
+              <div style="padding: 2rem; flex: 1; display: flex; flex-direction: column;">
+                <h3 style="margin:0 0 1rem 0; font-size:1.5rem; color:var(--fg);">${i.title}</h3>
+                <p style="color:var(--fg-muted); font-size: 0.95rem; line-height: 1.6; margin-bottom: 2rem; flex: 1;">
+                  <strong>Key Ingredients:</strong><br>
+                  ${i.ingredients.substring(0, 100)}${i.ingredients.length > 100 ? '...' : ''}
+                </p>
+                <div style="display: flex; gap: 0.5rem; align-items: center;">
+                  <a class="btn" href="/recipes/${i.id}/" style="flex: 1; text-align: center;">View Steps</a>
+                  <button class="btn btn-secondary" style="padding: 0.8rem;" onclick="this.innerHTML = this.innerHTML === '🤍' ? '❤️' : '🤍'">🤍</button>
+                </div>
+              </div>
             </div>
-          `).join('') || '<div class="card" style="grid-column: 1/-1; text-align:center;"><p class="muted">No recipes match your search.</p></div>';
+          `).join('') || `
+            <div class="card reveal" style="grid-column: 1/-1; text-align:center; padding: 4rem;">
+              <div style="font-size: 3rem; margin-bottom: 1rem;">🍽️</div>
+              <h3>No recipes found</h3>
+              <p>Try searching for different ingredients or styles.</p>
+            </div>
+          `;
         }
 
         search.addEventListener('input', render);
@@ -39,5 +63,6 @@
       });
   </script>
 {% endblock %}
+
 
 
