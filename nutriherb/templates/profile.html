@@ -1,28 +1,67 @@
 {% extends 'base.html' %}
-{% block title %}My Profile - NutriHerb{% endblock %}
+{% block title %}My Wellness Dashboard | NutriHerb{% endblock %}
 {% block content %}
-<div class="hero-banner animate" style="padding: 64px 40px; text-align: left; grid-template-columns: 1fr;">
-    <h2 class="hero-title">Hello, {{ user.username }}!</h2>
-    <p class="hero-sub" style="margin-top:16px;">This is your personal dashboard for curated wellness.</p>
+<section class="reveal" style="margin-bottom: 4rem;">
+  <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 2rem;">
+    <div>
+      <h1 style="font-size: 3.5rem; margin-bottom: 0.5rem;">Hello, {{ user.username }}!</h1>
+      <p style="font-size: 1.2rem; color: var(--fg-muted);">Your personal journey towards vibrant health starts here.</p>
+    </div>
+    <div style="display: flex; gap: 1rem;">
+      <a href="/recipes/" class="btn">Find New Recipes</a>
+      <a href="/logout/" class="btn btn-secondary">Logout</a>
+    </div>
+  </div>
+</section>
+
+<!-- Stats Grid -->
+<div class="grid" style="margin-bottom: 4rem;">
+  <div class="card reveal delay-1" style="background: white; border-bottom: 4px solid var(--primary);">
+    <div style="font-size: 0.85rem; text-transform: uppercase; color: var(--fg-light); font-weight: 800; margin-bottom: 1rem;">Recipes Saved</div>
+    <div style="font-size: 3rem; font-weight: 800;">{{ favorites.count }}</div>
+    <p style="font-size: 0.9rem; margin-top: 0.5rem; color: var(--primary-dark);">+2 this week</p>
+  </div>
+  
+  <div class="card reveal delay-1" style="background: white; border-bottom: 4px solid var(--secondary);">
+    <div style="font-size: 0.85rem; text-transform: uppercase; color: var(--fg-light); font-weight: 800; margin-bottom: 1rem;">Wellness Score</div>
+    <div style="font-size: 3rem; font-weight: 800;">84<span style="font-size: 1.5rem; opacity: 0.5;">/100</span></div>
+    <p style="font-size: 0.9rem; margin-top: 0.5rem; color: var(--secondary);">Improving steady</p>
+  </div>
+  
+  <div class="card reveal delay-1" style="background: white; border-bottom: 4px solid var(--accent-blue);">
+    <div style="font-size: 0.85rem; text-transform: uppercase; color: var(--fg-light); font-weight: 800; margin-bottom: 1rem;">Ingredients Explored</div>
+    <div style="font-size: 3rem; font-weight: 800;">12</div>
+    <p style="font-size: 0.9rem; margin-top: 0.5rem; color: var(--accent-blue);">3 new badges</p>
+  </div>
 </div>
 
-<div class="section animate" style="margin-top: 40px;">
+<div class="section reveal delay-2">
+  <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2rem;">
     <h2>Your Saved Recipes</h2>
-    <div class="bento-grid" id="favorites-list">
-        {% for fav in favorites %}
-        <div class="card" style="display:flex; flex-direction:column; justify-content:space-between;">
-            <div>
-                <h3 style="margin:0 0 16px 0; font-size:24px; color:#064e3b;">{{ fav.recipe.title }}</h3>
-                <p class="muted" style="font-size:14px;">Added on {{ fav.created_at|date:"M d, Y" }}</p>
-            </div>
-            <a class="btn" href="/recipes/{{ fav.recipe.id }}/" style="text-align: center; width: 100%; margin-top: 16px;">View Recipe</a>
-        </div>
-        {% empty %}
-        <div class="card span-3" style="text-align:center; padding: 64px;">
-            <p class="muted">You haven't saved any recipes yet.</p>
-            <a href="/recipes/" class="btn" style="margin-top: 16px;">Browse Recipes</a>
-        </div>
-        {% endfor %}
+    <p style="color: var(--fg-light);">{{ favorites.count }} items</p>
+  </div>
+  
+  <div class="bento" style="grid-template-rows: auto;">
+    {% for fav in favorites %}
+    <div class="card reveal" style="padding: 0; overflow: hidden; display: flex; flex-direction: column;">
+      <div style="height: 120px; background: var(--bg-1); display: flex; align-items: center; justify-content: center; font-size: 3rem;">
+        🥗
+      </div>
+      <div style="padding: 1.5rem; flex: 1;">
+        <h3 style="margin-bottom: 0.5rem; font-size: 1.25rem;">{{ fav.recipe.title }}</h3>
+        <p style="font-size: 0.85rem; color: var(--fg-light); margin-bottom: 1.5rem;">Saved on {{ fav.created_at|date:"M d, Y" }}</p>
+        <a class="btn" href="/recipes/{{ fav.recipe.id }}/" style="width: 100%; text-align: center; padding: 0.6rem;">Cook Now</a>
+      </div>
     </div>
+    {% empty %}
+    <div class="card reveal" style="grid-column: 1/-1; text-align:center; padding: 6rem; background: rgba(255,255,255,0.3);">
+      <div style="font-size: 4rem; margin-bottom: 1.5rem;">📖</div>
+      <h3>Your cookbook is empty</h3>
+      <p style="margin-bottom: 2rem;">Start exploring our collection of superfood-powered recipes.</p>
+      <a href="/recipes/" class="btn">Explore Recipes</a>
+    </div>
+    {% endfor %}
+  </div>
 </div>
 {% endblock %}
+
